@@ -25,6 +25,8 @@ import org.apache.commons.lang3.RandomUtils;
 
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaInflectorServerCodegen", date = "2017-04-08T15:48:56.501Z")
 public class UserController {
@@ -178,6 +180,22 @@ public class UserController {
         return new ResponseContext()
                 .contentType(Util.getMediaType(request))
                 .entity(jsonResponse);
+    }
+
+    public ResponseContext searchUsers(final RequestContext request, final String email, final String username, final String name) {
+        final List<User> searchResults = userData.searchUsers(email, username, name);
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(searchResults);
+    }
+
+    public ResponseContext getUserStats(final RequestContext request) {
+        final Map<String, Object> stats = userData.getUserStats();
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(stats);
     }
 }
 

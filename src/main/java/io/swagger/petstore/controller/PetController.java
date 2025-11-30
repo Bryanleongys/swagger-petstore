@@ -30,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaInflectorServerCodegen", date = "2017-04-08T15:48:56.501Z")
 public class PetController {
@@ -260,6 +261,22 @@ public class PetController {
         return new ResponseContext()
                 .contentType(Util.getMediaType(request))
                 .entity(availablePets);
+    }
+
+    public ResponseContext searchPets(final RequestContext request, final String name, final Long categoryId) {
+        final List<Pet> searchResults = petData.searchPets(name, categoryId);
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(searchResults);
+    }
+
+    public ResponseContext getPetStats(final RequestContext request) {
+        final Map<String, Object> stats = petData.getPetStats();
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(stats);
     }
 
 }

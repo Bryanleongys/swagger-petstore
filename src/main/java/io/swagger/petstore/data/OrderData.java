@@ -18,7 +18,11 @@ package io.swagger.petstore.data;
 
 import io.swagger.petstore.model.Order;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class OrderData {
     private static List<Order> orders = new ArrayList<>();
@@ -74,6 +78,55 @@ public class OrderData {
             }
         }
         return pendingOrders;
+    }
+
+    public List<Order> searchOrders(final String status, final Long petId) {
+        final List<Order> result = new ArrayList<>();
+        for (final Order order : orders) {
+            boolean matches = true;
+
+            if (status != null && !status.isEmpty()) {
+                if (order.getStatus() == null || !order.getStatus().equals(status)) {
+                    matches = false;
+                }
+            }
+
+            if (petId != null && matches) {
+                if (order.getPetId() != petId) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                result.add(order);
+            }
+        }
+        return result;
+    }
+
+    public Map<String, Object> getStoreStats() {
+        final Map<String, Object> stats = new HashMap<>();
+        final Map<String, Integer> ordersByStatus = new HashMap<>();
+        int totalQuantity = 0;
+
+        for (final Order order : orders) {
+            // Count orders by status
+            final String status = order.getStatus();
+            if (status != null) {
+                ordersByStatus.put(status, ordersByStatus.getOrDefault(status, 0) + 1);
+            }
+
+            // Sum total quantity
+            if (order.getQuantity() != null) {
+                totalQuantity += order.getQuantity();
+            }
+        }
+
+        stats.put("totalOrders", orders.size());
+        stats.put("totalQuantity", totalQuantity);
+        stats.put("ordersByStatus", ordersByStatus);
+
+        return stats;
     }
 
     public static Order createOrder(final long id, final long petId, final int quantity, final Date shipDate,

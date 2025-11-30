@@ -263,6 +263,81 @@ paths:
         - petstore_auth:
             - write:pets
             - read:pets
+  /pets/search:
+    get:
+      tags:
+        - pet
+      summary: Search pets by name.
+      description: Search and filter pets by name (case-insensitive partial match).
+      operationId: searchPets
+      parameters:
+        - name: name
+          in: query
+          description: Pet name to search for (partial match)
+          required: false
+          schema:
+            type: string
+        - name: categoryId
+          in: query
+          description: Filter by category ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: Unexpected error
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /pets/stats:
+    get:
+      tags:
+        - pet
+      summary: Get pet statistics.
+      description: Returns statistics about pets including count by status and category.
+      operationId: getPetStats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalPets:
+                    type: integer
+                    format: int32
+                  byStatus:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                      format: int32
+                  byCategory:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                      format: int32
+        default:
+          description: Unexpected error
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/{petId}:
     get:
       tags:
@@ -552,6 +627,81 @@ paths:
           description: Unexpected error
       security:
         - api_key: []
+  /orders/search:
+    get:
+      tags:
+        - store
+      summary: Search and filter orders.
+      description: Search orders by status and filter by date range.
+      x-swagger-router-controller: OrderController
+      operationId: searchOrders
+      parameters:
+        - name: status
+          in: query
+          description: Filter by order status
+          required: false
+          schema:
+            type: string
+            enum:
+              - placed
+              - approved
+              - delivered
+        - name: petId
+          in: query
+          description: Filter by pet ID
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
+  /store/stats:
+    get:
+      tags:
+        - store
+      summary: Get store statistics.
+      description: Returns statistics about orders including total count, revenue, and breakdown by status.
+      x-swagger-router-controller: OrderController
+      operationId: getStoreStats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalOrders:
+                    type: integer
+                    format: int32
+                  totalQuantity:
+                    type: integer
+                    format: int32
+                  ordersByStatus:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                      format: int32
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
   /user:
     post:
       tags:
@@ -688,6 +838,77 @@ paths:
                     type: integer
                     format: int32
                     example: 42
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
+  /users/search:
+    get:
+      tags:
+        - user
+      summary: Search users by criteria.
+      description: Search users by email, username, or name (case-insensitive partial match).
+      operationId: searchUsers
+      parameters:
+        - name: email
+          in: query
+          description: Search by email (partial match)
+          required: false
+          schema:
+            type: string
+        - name: username
+          in: query
+          description: Search by username (partial match)
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Search by first or last name (partial match)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
+  /users/stats:
+    get:
+      tags:
+        - user
+      summary: Get user statistics.
+      description: Returns statistics about users including total count and breakdown by user status.
+      operationId: getUserStats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalUsers:
+                    type: integer
+                    format: int32
+                  usersByStatus:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                      format: int32
         default:
           description: Unexpected error
       security:

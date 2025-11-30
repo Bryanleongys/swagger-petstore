@@ -19,7 +19,9 @@ package io.swagger.petstore.data;
 import io.swagger.petstore.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserData {
     private static List<User> users = new ArrayList<>();
@@ -76,6 +78,61 @@ public class UserData {
 
     public int getUserCount() {
         return users.size();
+    }
+
+    public List<User> searchUsers(final String email, final String username, final String name) {
+        final List<User> result = new ArrayList<>();
+        for (final User user : users) {
+            boolean matches = true;
+
+            if (email != null && !email.isEmpty()) {
+                if (user.getEmail() == null || !user.getEmail().toLowerCase().contains(email.toLowerCase())) {
+                    matches = false;
+                }
+            }
+
+            if (username != null && !username.isEmpty() && matches) {
+                if (user.getUsername() == null || !user.getUsername().toLowerCase().contains(username.toLowerCase())) {
+                    matches = false;
+                }
+            }
+
+            if (name != null && !name.isEmpty() && matches) {
+                boolean nameMatch = false;
+                if (user.getFirstName() != null && user.getFirstName().toLowerCase().contains(name.toLowerCase())) {
+                    nameMatch = true;
+                }
+                if (user.getLastName() != null && user.getLastName().toLowerCase().contains(name.toLowerCase())) {
+                    nameMatch = true;
+                }
+                if (!nameMatch) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                result.add(user);
+            }
+        }
+        return result;
+    }
+
+    public Map<String, Object> getUserStats() {
+        final Map<String, Object> stats = new HashMap<>();
+        final Map<String, Integer> usersByStatus = new HashMap<>();
+
+        for (final User user : users) {
+            // Count users by status
+            if (user.getUserStatus() != null) {
+                final String statusKey = String.valueOf(user.getUserStatus());
+                usersByStatus.put(statusKey, usersByStatus.getOrDefault(statusKey, 0) + 1);
+            }
+        }
+
+        stats.put("totalUsers", users.size());
+        stats.put("usersByStatus", usersByStatus);
+
+        return stats;
     }
 
     public static User createUser(final long id, final String username, final String firstName,

@@ -22,7 +22,9 @@ import io.swagger.petstore.model.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PetData {
     private static List<Pet> pets = new ArrayList<>();
@@ -120,6 +122,56 @@ public class PetData {
 
     public List<Pet> getAvailablePets() {
         return findPetByStatus("available");
+    }
+
+    public List<Pet> searchPets(final String name, final Long categoryId) {
+        final List<Pet> result = new ArrayList<>();
+        for (final Pet pet : pets) {
+            boolean matches = true;
+
+            if (name != null && !name.isEmpty()) {
+                if (pet.getName() == null || !pet.getName().toLowerCase().contains(name.toLowerCase())) {
+                    matches = false;
+                }
+            }
+
+            if (categoryId != null && matches) {
+                if (pet.getCategory() == null || pet.getCategory().getId() != categoryId) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                result.add(pet);
+            }
+        }
+        return result;
+    }
+
+    public Map<String, Object> getPetStats() {
+        final Map<String, Object> stats = new HashMap<>();
+        final Map<String, Integer> byStatus = new HashMap<>();
+        final Map<String, Integer> byCategory = new HashMap<>();
+
+        for (final Pet pet : pets) {
+            // Count by status
+            final String status = pet.getStatus();
+            if (status != null) {
+                byStatus.put(status, byStatus.getOrDefault(status, 0) + 1);
+            }
+
+            // Count by category
+            if (pet.getCategory() != null && pet.getCategory().getName() != null) {
+                final String categoryName = pet.getCategory().getName();
+                byCategory.put(categoryName, byCategory.getOrDefault(categoryName, 0) + 1);
+            }
+        }
+
+        stats.put("totalPets", pets.size());
+        stats.put("byStatus", byStatus);
+        stats.put("byCategory", byCategory);
+
+        return stats;
     }
 
     public static Pet createPet(final Long id, final Category cat, final String name,
