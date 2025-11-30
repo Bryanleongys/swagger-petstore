@@ -169,5 +169,15 @@ public class UserController {
         final User user = UserData.createUser(id, username, firstName, lastName, email, phone, userStatus);
         return updateUser(request, updatedUser, user);
     }
+
+    public ResponseContext getUserCount(final RequestContext request) {
+        final int count = userData.getUserCount();
+
+        final String jsonResponse = "{\"count\": " + count + "}";
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(jsonResponse);
+    }
 }
 

@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaInflectorServerCodegen", date = "2017-04-08T15:48:56.501Z")
 public class OrderController {
@@ -92,5 +93,13 @@ public class OrderController {
         } else {
             return new ResponseContext().status(Response.Status.NOT_MODIFIED).entity("Order couldn't be deleted.");
         }
+    }
+
+    public ResponseContext getPendingOrders(final RequestContext request) {
+        final List<Order> pendingOrders = orderData.getPendingOrders();
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(pendingOrders);
     }
 }

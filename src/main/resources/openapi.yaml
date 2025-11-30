@@ -198,6 +198,71 @@ paths:
         - petstore_auth:
             - write:pets
             - read:pets
+  /pets/recent:
+    get:
+      tags:
+        - pet
+      summary: Get recently added pets.
+      description: Returns a list of the most recently added pets to the store.
+      operationId: getRecentPets
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of pets to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: Unexpected error
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /pets/available:
+    get:
+      tags:
+        - pet
+      summary: Get available pets.
+      description: Returns all pets with 'available' status.
+      operationId: getAvailablePets
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: Unexpected error
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/{petId}:
     get:
       tags:
@@ -461,6 +526,32 @@ paths:
           description: Order not found
         default:
           description: Unexpected error
+  /store/orders/pending:
+    get:
+      tags:
+        - store
+      summary: Get pending orders.
+      description: Returns all orders with 'pending' or 'placed' status.
+      x-swagger-router-controller: OrderController
+      operationId: getPendingOrders
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
   /user:
     post:
       tags:
@@ -578,6 +669,29 @@ paths:
           description: successful operation
         default:
           description: Unexpected error
+  /users/count:
+    get:
+      tags:
+        - user
+      summary: Get total user count.
+      description: Returns the total number of registered users in the system.
+      operationId: getUserCount
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    example: 42
+        default:
+          description: Unexpected error
+      security:
+        - api_key: []
   /user/{username}:
     get:
       tags:

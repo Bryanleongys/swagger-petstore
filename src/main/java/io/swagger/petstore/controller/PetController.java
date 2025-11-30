@@ -244,6 +244,23 @@ public class PetController {
                 .contentType(Util.getMediaType(request))
                 .entity(petByTags);
     }
-    
+
+    public ResponseContext getRecentPets(final RequestContext request, final Integer limit) {
+        final int petLimit = (limit != null && limit > 0 && limit <= 100) ? limit : 10;
+        final List<Pet> recentPets = petData.getRecentPets(petLimit);
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(recentPets);
+    }
+
+    public ResponseContext getAvailablePets(final RequestContext request) {
+        final List<Pet> availablePets = petData.getAvailablePets();
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(availablePets);
+    }
+
 }
 

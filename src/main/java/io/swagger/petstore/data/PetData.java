@@ -112,6 +112,16 @@ public class PetData {
         pets.removeIf(pet -> pet.getId() == petId);
     }
 
+    public List<Pet> getRecentPets(final int limit) {
+        final int size = pets.size();
+        final int startIndex = Math.max(0, size - limit);
+        return new ArrayList<>(pets.subList(startIndex, size));
+    }
+
+    public List<Pet> getAvailablePets() {
+        return findPetByStatus("available");
+    }
+
     public static Pet createPet(final Long id, final Category cat, final String name,
                             final List<String> urls, final List<Tag> tags, final String status) {
         final Pet pet = new Pet();

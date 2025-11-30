@@ -65,6 +65,17 @@ public class OrderData {
         orders.removeIf(order -> order.getId() == orderId);
     }
 
+    public List<Order> getPendingOrders() {
+        final List<Order> pendingOrders = new ArrayList<>();
+        for (final Order order : orders) {
+            final String status = order.getStatus();
+            if ("pending".equals(status) || "placed".equals(status)) {
+                pendingOrders.add(order);
+            }
+        }
+        return pendingOrders;
+    }
+
     public static Order createOrder(final long id, final long petId, final int quantity, final Date shipDate,
                                      final String status, final boolean complete) {
         final Order order = new Order();

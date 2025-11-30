@@ -74,6 +74,10 @@ public class UserData {
         users.removeIf(user -> user.getUsername().equals(username));
     }
 
+    public int getUserCount() {
+        return users.size();
+    }
+
     public static User createUser(final long id, final String username, final String firstName,
                                    final String lastName, final String email, final String phone, final int userStatus) {
         final User user = new User();
