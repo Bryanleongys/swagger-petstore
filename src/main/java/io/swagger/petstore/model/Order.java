@@ -27,6 +27,7 @@ public class Order {
   private long id;
   private long petId;
   private int quantity;
+  private long userId;
   private Date shipDate;
   private String status;
   private boolean complete;
@@ -56,6 +57,15 @@ public class Order {
 
   public void setPetId(long petId) {
     this.petId = petId;
+  }
+
+  @XmlElement(name = "userId")
+  public long getUserId() {
+    return userId;
+  }
+
+  public void setUserId(long userId) {
+    this.userId = userId;
   }
 
   @XmlElement(name = "quantity")

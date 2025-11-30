@@ -28,9 +28,9 @@ public class OrderData {
     private static List<Order> orders = new ArrayList<>();
 
     static {
-        orders.add(createOrder(1, 1, 100, new Date(), "placed", true));
-        orders.add(createOrder(2, 1, 50, new Date(), "approved", true));
-        orders.add(createOrder(3, 1, 50, new Date(), "delivered", true));
+        orders.add(createOrder(1, 1, 100, 1, new Date(), "placed", true));
+        orders.add(createOrder(2, 1, 50, 2, new Date(), "approved", true));
+        orders.add(createOrder(3, 2, 50, 1, new Date(), "delivered", true));
     }
 
     public Order getOrderById(final long orderId) {
@@ -129,11 +129,32 @@ public class OrderData {
         return stats;
     }
 
-    public static Order createOrder(final long id, final long petId, final int quantity, final Date shipDate,
+    public List<Order> getOrdersByPetId(final long petId) {
+        final List<Order> result = new ArrayList<>();
+        for (final Order order : orders) {
+            if (order.getPetId() == petId) {
+                result.add(order);
+            }
+        }
+        return result;
+    }
+
+    public List<Order> getOrdersByUserId(final long userId) {
+        final List<Order> result = new ArrayList<>();
+        for (final Order order : orders) {
+            if (order.getUserId() == userId) {
+                result.add(order);
+            }
+        }
+        return result;
+    }
+
+    public static Order createOrder(final long id, final long petId, final int quantity, final long userId, final Date shipDate,
                                      final String status, final boolean complete) {
         final Order order = new Order();
         order.setId(id);
         order.setPetId(petId);
+        order.setUserId(userId);
         order.setComplete(complete);
         order.setQuantity(quantity);
         order.setShipDate(shipDate);

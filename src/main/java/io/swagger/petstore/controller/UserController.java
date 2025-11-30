@@ -18,7 +18,9 @@ package io.swagger.petstore.controller;
 
 import io.swagger.oas.inflector.models.RequestContext;
 import io.swagger.oas.inflector.models.ResponseContext;
+import io.swagger.petstore.data.OrderData;
 import io.swagger.petstore.data.UserData;
+import io.swagger.petstore.model.Order;
 import io.swagger.petstore.model.User;
 import io.swagger.petstore.utils.Util;
 import org.apache.commons.lang3.RandomUtils;
@@ -32,6 +34,7 @@ import java.util.Map;
 public class UserController {
 
     private static UserData userData = new UserData();
+    private static OrderData orderData = new OrderData();
 
     public ResponseContext createUser(final RequestContext request, final User user) {
         if (user == null) {
@@ -196,6 +199,25 @@ public class UserController {
         return new ResponseContext()
                 .contentType(Util.getMediaType(request))
                 .entity(stats);
+    }
+
+    public ResponseContext getOrdersByUsername(final RequestContext request, final String username) {
+        if (username == null) {
+            return new ResponseContext()
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("No username provided. Try again?");
+        }
+
+        final User user = userData.findUserByName(username);
+        if (user == null) {
+            return new ResponseContext().status(Response.Status.NOT_FOUND).entity("User not found");
+        }
+
+        final List<Order> orders = orderData.getOrdersByUserId(user.getId());
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(orders);
     }
 }
 

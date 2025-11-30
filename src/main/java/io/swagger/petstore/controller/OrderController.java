@@ -70,9 +70,9 @@ public class OrderController {
                 .entity(order);
     }
 
-    public ResponseContext placeOrder(final RequestContext request, final Long id, final Long petId, final Integer quantity, final DateTime shipDate,
+    public ResponseContext placeOrder(final RequestContext request, final Long id, final Long petId, final Integer quantity, final Long userId, final DateTime shipDate,
                                       final String status, final Boolean complete) {
-        final Order order = OrderData.createOrder(id, petId, quantity, new Date(), status, complete);
+        final Order order = OrderData.createOrder(id, petId, quantity, userId != null ? userId : 1L, new Date(), status, complete);
         return placeOrder(request,order);
     }
 
@@ -118,5 +118,19 @@ public class OrderController {
         return new ResponseContext()
                 .contentType(Util.getMediaType(request))
                 .entity(stats);
+    }
+
+    public ResponseContext getOrdersByPetId(final RequestContext request, final Long petId) {
+        if (petId == null) {
+            return new ResponseContext()
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("No petId provided. Try again?");
+        }
+
+        final List<Order> orders = orderData.getOrdersByPetId(petId);
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(orders);
     }
 }
