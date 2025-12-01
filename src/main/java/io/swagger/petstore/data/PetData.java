@@ -174,6 +174,10 @@ public class PetData {
         return stats;
     }
 
+    public List<Category> getAllCategories() {
+        return new ArrayList<>(categories);
+    }
+
     public static Pet createPet(final Long id, final Category cat, final String name,
                             final List<String> urls, final List<Tag> tags, final String status) {
         final Pet pet = new Pet();

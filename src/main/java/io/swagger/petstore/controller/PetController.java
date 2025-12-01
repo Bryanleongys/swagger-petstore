@@ -279,5 +279,13 @@ public class PetController {
                 .entity(stats);
     }
 
+    public ResponseContext getCategories(final RequestContext request) {
+        final List<Category> categories = petData.getAllCategories();
+
+        return new ResponseContext()
+                .contentType(Util.getMediaType(request))
+                .entity(categories);
+    }
+
 }
 

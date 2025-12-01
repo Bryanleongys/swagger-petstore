@@ -338,6 +338,33 @@ paths:
         - petstore_auth:
             - write:pets
             - read:pets
+  /categories:
+    get:
+      tags:
+        - pet
+      summary: List all pet categories.
+      description: Returns a list of all available pet categories in the system.
+      operationId: getCategories
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        default:
+          description: Unexpected error
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
   /pet/{petId}:
     get:
       tags:
