@@ -271,14 +271,6 @@ public class PetController {
                 .entity(searchResults);
     }
 
-    public ResponseContext getPetStats(final RequestContext request) {
-        final Map<String, Object> stats = petData.getPetStats();
-
-        return new ResponseContext()
-                .contentType(Util.getMediaType(request))
-                .entity(stats);
-    }
-
     public ResponseContext getCategories(final RequestContext request) {
         final List<Category> categories = petData.getAllCategories();
 

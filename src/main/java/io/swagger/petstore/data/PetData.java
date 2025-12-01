@@ -148,32 +148,6 @@ public class PetData {
         return result;
     }
 
-    public Map<String, Object> getPetStats() {
-        final Map<String, Object> stats = new HashMap<>();
-        final Map<String, Integer> byStatus = new HashMap<>();
-        final Map<String, Integer> byCategory = new HashMap<>();
-
-        for (final Pet pet : pets) {
-            // Count by status
-            final String status = pet.getStatus();
-            if (status != null) {
-                byStatus.put(status, byStatus.getOrDefault(status, 0) + 1);
-            }
-
-            // Count by category
-            if (pet.getCategory() != null && pet.getCategory().getName() != null) {
-                final String categoryName = pet.getCategory().getName();
-                byCategory.put(categoryName, byCategory.getOrDefault(categoryName, 0) + 1);
-            }
-        }
-
-        stats.put("totalPets", pets.size());
-        stats.put("byStatus", byStatus);
-        stats.put("byCategory", byCategory);
-
-        return stats;
-    }
-
     public List<Category> getAllCategories() {
         return new ArrayList<>(categories);
     }
